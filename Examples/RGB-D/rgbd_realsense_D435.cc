@@ -145,7 +145,7 @@ int main(int argc, char **argv) {
             ++index;
             if (index == 1) {
                 sensor.set_option(RS2_OPTION_ENABLE_AUTO_EXPOSURE, 1);
-                //sensor.set_option(RS2_OPTION_AUTO_EXPOSURE_LIMIT,50000);
+                //sensor.set_option(RS2_OPTION_AUTO_EXPOSURE_LIMIT,50000); // Removed for latest librealsense sdk
                 sensor.set_option(RS2_OPTION_EMITTER_ENABLED, 1); // emitter on for depth information
             }
             // std::cout << "  " << index << " : " << sensor.get_info(RS2_CAMERA_INFO_NAME) << std::endl;
@@ -175,9 +175,9 @@ int main(int argc, char **argv) {
     // cfg.enable_stream(RS2_STREAM_INFRARED, 1, 640, 480, RS2_FORMAT_Y8, 30);
     cfg.enable_stream(RS2_STREAM_DEPTH,640, 480, RS2_FORMAT_Z16, 30);
 
-    // IMU stream
-    cfg.enable_stream(RS2_STREAM_ACCEL, RS2_FORMAT_MOTION_XYZ32F); //, 250); // 63
-    cfg.enable_stream(RS2_STREAM_GYRO, RS2_FORMAT_MOTION_XYZ32F); //, 400);
+    // IMU stream   DISABLED IMU for support D435 cam
+    //cfg.enable_stream(RS2_STREAM_ACCEL, RS2_FORMAT_MOTION_XYZ32F); //, 250); // 63
+    //cfg.enable_stream(RS2_STREAM_GYRO, RS2_FORMAT_MOTION_XYZ32F); //, 400);
 
     // IMU callback
     std::mutex imu_mutex;
@@ -319,9 +319,9 @@ int main(int argc, char **argv) {
     while (!SLAM.isShutDown())
     {
         {
-            std::unique_lock<std::mutex> lk(imu_mutex);
+            //std::unique_lock<std::mutex> lk(imu_mutex);   // Disabled for D435
             if(!image_ready)
-                cond_image_rec.wait(lk);
+                //cond_image_rec.wait(lk);                  // Disabled for D435
 
 #ifdef COMPILEDWITHC11
             std::chrono::steady_clock::time_point time_Start_Process = std::chrono::steady_clock::now();
